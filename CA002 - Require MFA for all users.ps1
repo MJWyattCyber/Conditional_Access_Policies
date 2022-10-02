@@ -12,12 +12,13 @@ $params = @{
                 "All"
             )
         }
+        ## Within the users section you can select Users, Roles or Groups. It is recomended to have at least one break glass account.
         Users = @{
             IncludeUsers = @(
                 "All"
             )
             ExcludeUsers = @(
-                "BREAK GLASS ACCOUNT ID GOES HERE" ##Replace this with any users you need to exclude, it's recommended to have at least one break glass account here. 
+                "EXCLUDED USER, GROUP OR ROLE IDS TO GO HERE"  
             )
         }
     }

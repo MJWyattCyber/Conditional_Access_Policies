@@ -1,9 +1,14 @@
 Connect-MgGraph -Scopes "Policy.ReadWrite.ConditionalAccess"
 
+## This policy does require an Azure AD P2 License as it relies on Identity Protection.
 $params = @{
-    displayName = "CA003: Block - Not allowed countries"
-    State = "enabledForReportingButNotEnforced"
+    displayName = "CA006: Grant - Require MFA for medium + Risk Sign-Ins"
+    State = "EnabledForReportingButNotEnforced"
     Conditions = @{
+        SignInRiskLevels = @(
+            "high"
+            "medium"
+        )
         Applications = @{
             IncludeApplications = @(
                 "All"
@@ -15,20 +20,12 @@ $params = @{
                 "All"
             )
             ExcludeUsers = @(
-                "USER ID TO EXCLUDE WOULD GO HERE"  
-            )
-        }
-        Locations = @{
-            IncludeLocations = @(
-                "All"
-            )
-            ExcludeLocations = @(
-                "Include Name of Named Location for Allowed Connections"
+                "USER, ROLE OR GROUP ID TO EXCLUDE WOULD GO HERE"
             )
         }
     }
     GrantControls = @{
-        Operator = "OR"
+        operator = "OR"
         BuiltInControls = @(
             "mfa"
         )
