@@ -9,6 +9,7 @@ $params = @{
                 "All"
             )
         }
+        ## Within the users section you can select Users, Roles or Groups. It is recomended to have at least one break glass account.
         Users = @{
             IncludeRoles = @(
                 "62e90394-69f5-4237-9190-012177145e10"
@@ -60,7 +61,7 @@ $params = @{
                 "8835291a-918c-4fd7-a9ce-faa49f0cf7d9"
             )
             ExcludeUsers = @(
-                "USER ID TO EXCLUDE GOES HERE" ## It is recommended to exclude a break glass admin so you do not lock yourself out. 
+                "USER, GROUP OR ROLE ID TO EXCLUDE GOES HERE" 
             )
         }
     }
@@ -70,4 +71,18 @@ $params = @{
             "mfa"
         )
     }
+    ## This section is arguably optional but will stop browser persistence for all admin users and require them to sign in every working day (8 hours), providing mfa when they do so. 
+    SessionControls = @{
+		PersistentBrowser = @{
+            Mode = "never"
+            IsEnabled = $true
+        }
+		SignInFrequency = @{
+			Value = 8
+			Type = "hours"
+			IsEnabled = $true
+		}
+	}
 }
+
+New-MgIdentityConditionalAccessPolicy -BodyParameter $params

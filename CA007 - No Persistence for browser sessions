@@ -1,0 +1,39 @@
+Connect-MgGraph -Scopes "Policy.ReadWrite.All"
+##This is configured for guest users however, you could specify other options such as all users, certain platforms or certain apps etc. 
+
+$params = @{
+    displayName = "CA007: Session - No persistence browser access for guests"
+    State = "EnabledForReportingButNotEnforced"
+    Conditions = @{
+        ClientAppTypes = @(
+            "browser"
+        )
+        Applications = @{
+            IncludeApplications = @(
+                "All"
+            )
+        }
+        ## Within the users section you can select Users, Roles or Groups. It is recomended to have at least one break glass account. 
+        Users = @{
+            IncludeUsers = @(
+                "GuestsOrExternalUsers"
+            )
+            ExcludeUsers = @(
+                "USER, GROUP OR ROLE ID TO EXCLUDE GOES HERE"
+            )
+        }
+    }
+    SessionControls = @{
+        PersistentBrowser = = @{
+            Mode = "never"
+            IsEnabled = $true
+        }
+        SignInFrequency = @{
+            Value = 1
+            Type = "Hours"
+            Isenabled = $true
+        }
+    }
+}
+
+New-MgIdentityConditionalAccessPolicy -BodyParameter $params
